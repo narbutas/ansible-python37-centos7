@@ -1,0 +1,40 @@
+---
+- name: "Download python {{ python_version_default }} source code"
+  get_url:
+    url: https://www.python.org/ftp/python/{{ python_version_default }}/Python-{{ python_version_default }}.tgz
+    dest: /usr/src/Python-{{ python_version_default }}.tgz
+    mode: '0644'
+  become: yes
+
+- name: "Unpack python {{ python_version_default }} source code"
+  unarchive:
+    src: /usr/src/Python-{{ python_version_default }}.tgz
+    dest: /usr/src/
+    remote_src: yes
+  become: yes
+
+- name: "Run 'configure' target as root"
+  command: chdir=//usr/src/Python-{{ python_version_default }} ./configure --enable-optimizations
+  become: yes
+
+- name: "Run 'make altinstall' target as root"
+  command: chdir=//usr/src/Python-{{ python_version_default }} make altinstall
+  become: yes
+
+- name: "Add PATH for new python version variable"
+  lineinfile:
+    path: /etc/environment
+    line: 'export python{{python_ver_var}}=/usr/local/bin/python{{python_ver_var}}'
+  become: yes
+
+- name: "Add PATH for new pip version variable"
+  lineinfile:
+    path: /etc/environment
+    line: 'export pip{{python_ver_var}}=/usr/local/bin/pip{{python_ver_var}}'
+  become: yes
+
+- name: "Remove python source code archive"
+  file:
+    path: /usr/src/Python-{{ python_version_default }}.tgz
+    state: absent
+  become: yes
