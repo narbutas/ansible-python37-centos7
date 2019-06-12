@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: ansible-python37-centos7
+  author: Tadas Narbutas
+  description: Ansible role to install Python3.7 on CentOS7
+
+  issue_tracker_url: https://github.com/narbutas/ansible-python37-centos7/issues
+  license: Apache-2.0
+  min_ansible_version: 2.5.2
+  github_branch: master
+  platforms:
+    - name: EL
+      versions:
+        - 7
+  galaxy_tags:
+    - Python3
+    - Python
+    - centos
+    - CentOS7
+dependencies: []
