@@ -24,13 +24,13 @@
 - name: "Add PATH for new python version variable"
   lineinfile:
     path: /etc/environment
-    line: 'export python{{python_ver_var}}=/usr/local/bin/python{{python_ver_var}}'
+    line: 'export python{{ python_ver_var }}=/usr/local/bin/python{{ python_ver_var }}'
   become: yes
 
 - name: "Add PATH for new pip version variable"
   lineinfile:
     path: /etc/environment
-    line: 'export pip{{python_ver_var}}=/usr/local/bin/pip{{python_ver_var}}'
+    line: 'export pip{{ python_ver_var }}=/usr/local/bin/pip{{ python_ver_var }}'
   become: yes
 
 - name: "Remove python source code archive"

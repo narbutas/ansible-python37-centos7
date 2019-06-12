@@ -13,8 +13,8 @@ galaxy_info:
       versions:
         - 7
   galaxy_tags:
-    - Python3
-    - Python
+    - python3
+    - python
     - centos
-    - CentOS7
+    - centos7
 dependencies: []
