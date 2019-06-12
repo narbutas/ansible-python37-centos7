@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/narbutas/ansible-python37-centos7.svg?branch=master)](https://travis-ci.com/narbutas/ansible-python37-centos7)
+
 # Ansible-Python-CentOS
 
 This role is or installing Python from source code on CentOS machines.
