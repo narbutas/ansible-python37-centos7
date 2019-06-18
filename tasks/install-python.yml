@@ -5,6 +5,7 @@
     dest: /usr/src/Python-{{ python_version_default }}.tgz
     mode: '0644'
   become: yes
+  when: python_installed is not defined and not python_installed.stat.exists
 
 - name: "Unpack python {{ python_version_default }} source code"
   unarchive:
@@ -12,29 +13,27 @@
     dest: /usr/src/
     remote_src: yes
   become: yes
+  when: python_installed is not defined and not python_installed.stat.exists
 
 - name: "Run 'configure' target as root"
-  command: chdir=//usr/src/Python-{{ python_version_default }} ./configure --enable-optimizations
+  command: chdir=/usr/src/Python-{{ python_version_default }} ./configure --enable-optimizations
   become: yes
+  tags: skip_ansible_lint
+  when: python_installed is not defined and not python_installed.stat.exists
 
-- name: "Run 'make altinstall' target as root"
-  command: chdir=//usr/src/Python-{{ python_version_default }} make altinstall
+- name: "Run 'make install' target as root"
+  make:
+    chdir: /usr/src/Python-{{ python_version_default }}
+    target: install
+    file: /usr/src/Python-{{ python_version_default }}/Makefile
+  notify: python installed
   become: yes
-
-- name: "Add PATH for new python version variable"
-  lineinfile:
-    path: /etc/environment
-    line: 'export python{{ python_ver_var }}=/usr/local/bin/python{{ python_ver_var }}'
-  become: yes
-
-- name: "Add PATH for new pip version variable"
-  lineinfile:
-    path: /etc/environment
-    line: 'export pip{{ python_ver_var }}=/usr/local/bin/pip{{ python_ver_var }}'
-  become: yes
+  tags: skip_ansible_lint
+  when: python_installed is not defined and not python_installed.stat.exists
 
 - name: "Remove python source code archive"
   file:
     path: /usr/src/Python-{{ python_version_default }}.tgz
     state: absent
   become: yes
+  when: python_installed is not defined and not python_installed.stat.exists
