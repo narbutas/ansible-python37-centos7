@@ -19,6 +19,7 @@ scenario:
     - create
     - converge
     - verify
+    - destroy
 verifier:
   name: testinfra
   lint:
