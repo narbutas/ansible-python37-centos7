@@ -1,39 +1,36 @@
 ---
-- name: "Download python {{ python_version_default }} source code"
-  get_url:
-    url: https://www.python.org/ftp/python/{{ python_version_default }}/Python-{{ python_version_default }}.tgz
-    dest: /usr/src/Python-{{ python_version_default }}.tgz
-    mode: '0644'
-  become: yes
-  when: python_installed is not defined and not python_installed.stat.exists
+- block:
+  - name: "Download python {{ python_version_default }} source code"
+    get_url:
+      url: https://www.python.org/ftp/python/{{ python_version_default }}/Python-{{ python_version_default }}.tgz
+      dest: /usr/src/Python-{{ python_version_default }}.tgz
+      mode: '0644'
+    become: yes
 
-- name: "Unpack python {{ python_version_default }} source code"
-  unarchive:
-    src: /usr/src/Python-{{ python_version_default }}.tgz
-    dest: /usr/src/
-    remote_src: yes
-  become: yes
-  when: python_installed is not defined and not python_installed.stat.exists
+  - name: "Unpack python {{ python_version_default }} source code"
+    unarchive:
+      src: /usr/src/Python-{{ python_version_default }}.tgz
+      dest: /usr/src/
+      remote_src: yes
+    become: yes
 
-- name: "Run 'configure' target as root"
-  command: chdir=/usr/src/Python-{{ python_version_default }} ./configure --enable-optimizations
-  become: yes
-  tags: skip_ansible_lint
-  when: python_installed is not defined and not python_installed.stat.exists
+  - name: "Run 'configure' target as root"
+    command: chdir=/usr/src/Python-{{ python_version_default }} ./configure --enable-optimizations
+    become: yes
+    tags: skip_ansible_lint
 
-- name: "Run 'make install' target as root"
-  make:
-    chdir: /usr/src/Python-{{ python_version_default }}
-    target: install
-    file: /usr/src/Python-{{ python_version_default }}/Makefile
-  notify: python installed
-  become: yes
-  tags: skip_ansible_lint
-  when: python_installed is not defined and not python_installed.stat.exists
+  - name: "Run 'make install' target as root"
+    make:
+      chdir: /usr/src/Python-{{ python_version_default }}
+      target: install
+      file: /usr/src/Python-{{ python_version_default }}/Makefile
+    notify: python installed
+    become: yes
+    tags: skip_ansible_lint
 
-- name: "Remove python source code archive"
-  file:
-    path: /usr/src/Python-{{ python_version_default }}.tgz
-    state: absent
-  become: yes
+  - name: "Remove python source code archive"
+    file:
+      path: /usr/src/Python-{{ python_version_default }}.tgz
+      state: absent
+    become: yes
   when: python_installed is not defined and not python_installed.stat.exists
