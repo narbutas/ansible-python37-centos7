@@ -1,4 +1,9 @@
 ---
+- name: "Get current python3 version"
+  shell: /usr/local/bin/python3 --version |sed 's/^Python //'
+  register: python_version_current
+  changed_when: 'python_version_current.stdout != python_version_default'
+
 - block:
   - name: "Download python {{ python_version_default }} source code"
     get_url:
@@ -33,4 +38,4 @@
       path: /usr/src/Python-{{ python_version_default }}.tgz
       state: absent
     become: yes
-  when: python_installed is not defined and not python_installed.stat.exists
+  when: 'python_version_current.stdout != python_version_default'
