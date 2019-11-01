@@ -3,6 +3,7 @@
   shell: /usr/local/bin/python3 --version |sed 's/^Python //'
   register: python_version_current
   changed_when: 'python_version_current.stdout != python_version_default'
+  check_mode: no
 
 - block:
   - name: "Download python {{ python_version_default }} source code"
